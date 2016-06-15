@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<script src='jquery-2.1.1.js'></script>
+<script src='ajax_upload_file.js'></script>
+
+<style>
+#div2{ position:relative;}
+#div1{background:#000; filter:alpha(opacity:50); opacity:0.5; position:absolute; top:0; left:0; z-index:2;}
+#imgPre{ position:absolute; top:0; left:0; z-index:1;}
+</style>
+</head>
+<script>
+
+	
+</script>
+<body>
+    
+    
+    <form id='img-form' method="post" action="41image_demo2.php" enctype="multipart/form-data">
+    	
+        <input type="hidden" name="x" id="x" value=""/>
+        <input type="hidden" name="y" id="y" value=""/>
+        <input type="hidden" name="l" id="l" value=""/>
+        <input type="file" name="img" id="imgOne" onchange="preImg(this.id,'imgPre');" />
+        <input type="button" name="btn" value="提交"/>        
+    </form>   
+    <div id="div2">
+    	<div id="div1"></div>
+    	<img id="imgPre" src="" style="display: block;" />    
+    </div>
+</body>
+<script>
+	$('#img-form input[type=button]').bind('click',function(){
+		$.ajaxFileUpload({
+			url:'41image_demo2.php',
+			fileElementId:["x","y","l","imgOne"],
+			secureuri:false,  //是否启用安全提交
+            dataType: 'text',   //数据类型  
+			success: function(response,status,xhr){
+				alert(response);
+			}
+		})
+	});
+	function preImg(sourceId, targetId) {  
+		if (typeof FileReader === 'undefined') {  
+			alert('Your browser does not support FileReader...');  
+			return;  
+		}  
+		var reader = new FileReader();  
+	  
+		reader.onload = function(e) {  
+			var img = document.getElementById(targetId);  
+			img.src = this.result;
+			var w=$("#imgPre").width();
+			var h=$("#imgPre").height();
+			$("#div2").width(w);
+			$("#div2").height(h);
+			if(w>h){
+				$("#div1").width(h);
+				$("#div1").height(h);
+			}else{
+				$("#div1").width(w);
+				$("#div1").height(w);
+			}
+			
+			var oDiv=document.getElementById('div1');
+			var oDiv2=document.getElementById('div2');
+			var disX=0;
+			var disY=0;
+			document.onmousedown=function(ev){
+				var oEvent=ev||event;
+				disX=oEvent.clientX-oDiv.offsetLeft;
+				disY=oEvent.clientY-oDiv.offsetTop;
+				document.onmousemove=function(ev){
+					var oEvent=ev||event;
+					var l=oEvent.clientX-disX;
+					var t=oEvent.clientY-disY
+					if(l<20)l=0;
+						else if(l>oDiv2.offsetWidth-oDiv.offsetWidth-20)l=oDiv2.offsetWidth-oDiv.offsetWidth;
+					if(t<20)t=0;
+						else if(t>oDiv2.offsetHeight-oDiv.offsetHeight-20)t=oDiv2.offsetHeight-oDiv.offsetHeight;
+					oDiv.style.left=l+'px';
+					oDiv.style.top=t+'px';
+				}
+				document.onmouseup=function(){
+					document.onmousemove=null;
+					$('#x').val(oDiv.offsetLeft);
+					$('#y').val(oDiv.offsetTop);
+					$('#l').val(oDiv.offsetWidth);
+				}
+				return false;
+			}
+			
+		}
+		
+		reader.readAsDataURL(document.getElementById(sourceId).files[0]);  
+	}  
+</script>
+</html>

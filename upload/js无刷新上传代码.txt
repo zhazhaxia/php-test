@@ -1,0 +1,32 @@
+function http(date,url,callback) {
+    function createXHttpRequest() {
+      if (window.ActiveXObject) {
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+      else if (window.XMLHttpRequest) {
+        xmlhttp = new XMLHttpRequest();
+      }
+      else {
+        return;
+      }
+    }
+
+    function starRequest(date) {
+      createXHttpRequest();
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+          if (xmlhttp.status == 200) {
+            callback();
+           
+          }
+        }
+      };
+      xmlhttp.open("POST", url, true);
+      xmlhttp.send(date);
+    }
+    starRequest(date);
+  }
+var date = new FormData($("from[name='form1']")[0]);
+var url = "http://www.bt2magnet.com/upload.php";
+var callback = function(){};
+http(date,url,callback);

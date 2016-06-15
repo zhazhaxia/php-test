@@ -1,0 +1,22 @@
+<HTML>
+	<HEAD>
+	<TITLE> 作业提交3 </TITLE>
+	  <LINK REL="stylesheet" TYPE="text/css" HREF="example.css">
+
+	</HEAD>
+    <body>
+作业提交3--上传多个文件
+			<FORM enctype="multipart/form-data"  METHOD="post" ACTION="upload3.php">
+
+				<INPUT TYPE="hidden" name="MAX_FILE_SIZE" value=1000000>
+
+				请输入要提交作业的文件名:<BR>
+                <input type="file" name="uploadfile[]" size=50 >	<BR>			
+                <input type="file" name="uploadfile[]" size=50 >	<BR>			
+                <input type="file" name="uploadfile[]" size=50 >	<BR>			
+              <INPUT TYPE="submit"  value="提交作业" name="submitup">
+			</FORM>
+
+    </BODY>
+</HTML>
+

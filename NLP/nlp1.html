@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>自然语言处理</title>
+<style>
+*{margin:0;padding:0;font-size:16px;}
+ul,li{list-style:none;}
+a{text-decoration:none;}
+
+header{width:100%;height:100px;background:#F90;margin-bottom:5px;background-image:url(image/1.png);overflow:hidden;}
+header span{height:100px;margin-left:40%;font-size:50px;font-weight:800;text-align:center;line-height:100px;color:#F0C;background-color:rgba(255,255,255,0.7);display:inline-block;}
+#main{width:70%;height:700px;background:#9CF;margin:0 auto;}
+#aside{width:20%;height:400px;background:#FCC;float:left;margin-left:10px;}
+#aside .a-title{width:100%;height:30px;background:#222;color:#fff;text-align:center;line-height:30px;border-radius:10px;}
+#method{width:100%;margin:10px 0 0 0;}
+#method li{height:25px;margin:5px 0 0 0;background:#9FC;border-radius:10px;text-align:center;line-height:25px;font-size:14px;cursor:pointer;}
+#method li:hover{background:#FFC;color:#636;font-size:16px;}
+#article{width:75%;height:480px;background:#F99;float:left;padding:10px;margin-left:10px;}
+#article .bf .b-text,#article .aft .a-text{width:95%;height:200px;}
+</style>
+</head>
+<body>
+<header><span>樱桃小丸子<span></header>
+<div id="main">
+	<aside id="aside">
+    	<div class="a-title">算法分类</div>
+        <ul id="method">
+        	<li class="mm">正向最大匹配</li>
+            <li class="rmm">逆向最大匹配</li>
+            <li class="dm">双向匹配</li>
+            <li class="fq">最大概率</li>
+            <li class="cixing">词性标注</li>
+        </ul>
+    </aside>
+    <article id="article">
+    	<div class="bf">
+        	<p>原文</p>
+            <textarea class="b-text">自然语言处理课怎么会那么多作业啊。</textarea>
+        </div>
+        <div class="aft">
+        	<p>分词后</p>
+            <textarea class="a-text"></textarea>
+        </div>
+    </article>
+
+</div>
+</body>
+<script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+<script>
+	$('#method .mm').click(function(){//正向
+		mm();
+	});
+	$('#method .rmm').click(function(){//逆向
+		rmm();
+	});
+	$('#method .dm').click(function(){//双向
+		$.ajax({
+			type:'POST',
+			url:"dmm.php",
+			data:{'word':$("#article .bf .b-text").val()},
+			success: function(res,status,xhr){
+				$('#article .aft .a-text').val(res);
+			},
+			complete: function(){
+				
+			}
+		})
+	});
+	$('#method .fq').click(function(){//最大概率
+		fq();
+	});
+	$('#method .cixing').click(function(){//词性标注
+		$.ajax({
+			type:'POST',
+			url:"cixingbiaozhu.php",
+			data:{content:$("#article .bf .b-text").val()},
+			dataType:'json',
+			cache: false,
+			success: function(res,status,xhr){
+				console.log(res.dividewords);
+				$('#article .aft .a-text').val(res.dividewords);
+			},
+			complete: function(){
+				
+			}
+		})
+	});
+	
+	
+	
+	
+	
+	
+	function rmm(){
+		$.ajax({
+			type:'POST',
+			url:"nixiang.php",
+			data:{'word':$("#article .bf .b-text").val()},
+			success: function(res,status,xhr){
+				$('#article .aft .a-text').val(res);
+			},
+			complete: function(){
+				
+			}
+		})
+	}
+	function mm(){
+		$.ajax({
+			type:'POST',
+			url:"zhengxiang.php",
+			data:{'word':$("#article .bf .b-text").val()},
+			success: function(res,status,xhr){
+				$('#article .aft .a-text').val(res);
+			},complete: function(){
+				
+			}
+		});
+	}
+	function fq(){
+		$.ajax({
+			type:'POST',
+			url:"frequency.php?random="+Math.random(),
+			data:{'word':$("#article .bf .b-text").val()},
+			success: function(res,status,xhr){
+				$('#article .aft .a-text').val(res);
+			},complete: function(){
+				
+			}
+		});
+	}
+	
+	
+</script>
+</html>
